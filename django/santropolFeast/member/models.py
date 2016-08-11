@@ -606,7 +606,7 @@ class Client_scheduled_status(models.Model):
     to_status = models.CharField(max_length=1)
     change_date = models.DateField(auto_now=False, auto_now_add=False,
         default=timezone.now, blank=True, null=True)
-    executed = models.BooleanField(default=False)
+    processed = models.BooleanField(default=False)
 
     def __str__(self):
         return self.client + ' from ' + self.from_status + ' to ' + self.from_status + ', on ' + self.change_date
