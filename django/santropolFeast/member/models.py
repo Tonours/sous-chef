@@ -603,8 +603,8 @@ class Client_scheduled_status(models.Model):
 
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     linked_scheduled_status = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, default = None)
-    status_from = models.CharField(max_length=1)
-    status_to = models.CharField(max_length=1)
+    status_from = models.CharField(max_length=1, choices=Client.CLIENT_STATUS)
+    status_to = models.CharField(max_length=1, choices=Client.CLIENT_STATUS)
     reason = models.CharField(max_length=200, blank=True, default = '')
     change_date = models.DateField(auto_now=False, auto_now_add=False,
         default=timezone.now, blank=True, null=True)
@@ -612,7 +612,10 @@ class Client_scheduled_status(models.Model):
     processed = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.client + ' from ' + self.from_status + ' to ' + self.from_status + ', on ' + self.change_date
+        return "{}: from {} to {}, on {}".format(self.client.member, self.status_from, self.status_to, self.change_date)
+        # return "From {} to {}, on {}".format(self.status_from, self.status_to, self.change_date)
+        # return self.client.member + ' from ' + self.status_from + ' to ' + self.status_to + ', on ' + self.change_date
+        # return 'From ' + self.status_from + ' to ' + self.status_to + ', on ' + str(self.change_date)
 
 
 class ClientFilter(FilterSet):
