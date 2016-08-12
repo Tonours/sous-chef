@@ -1,0 +1,20 @@
+<i class="close icon"></i>
+<div class="header">
+    {{ _('Status modification') }}
+</div>
+<div class="content">
+    <div class="ui form">
+        <div class="field">
+            <label>{{ _('Status') }}</label>
+            <select name="status_to" class="ui status_to dropdown" id="status-to">
+                {% for k,s in client_status %}
+                <option value={{k}} {% if k == status_to %}selected{% endif %}>{{s}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+</div>
+<div class="actions">
+    <button class="ui button deny">Cancel</button>
+    <input class="ui button approve" type="submit" value="OK" />
+</div>

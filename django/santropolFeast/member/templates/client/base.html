@@ -5,25 +5,41 @@
 
 {% block title %}Client{% endblock %}
 
+{% block extrahead %}
+<link href="{% static 'css/modal.min.css' %}" type="text/css" rel="stylesheet">
+{% endblock %}
+
 {% block extrajs %}
+<script src="{% static 'js/modal.min.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
     $('.ui.dropdown').dropdown({transition: 'drop'});
 
     $('.ui.dropdown.status').dropdown({
         transition: 'drop',
         onChange: function(value, text, $selectedItem) {
-            $(this).addClass('loading');
-            $.ajax({
-                url: "/member/change_status/" + {{ client.id }} + '/',
-                type: "POST",
-                data: {
-                    'status': value,
-                    'csrfmiddlewaretoken': '{{ csrf_token }}',
-                },
-                success: function(response) {
-                    $('.ui.dropdown.status').removeClass('loading');
-                }
-            })
+            var modalCtntURL = "{% url 'member:clientStatusSchedulerModal' client.id %}";
+            $.get(modalCtntURL, {status:value, csrfmiddlewaretoken: '{{ csrf_token }}',}, function(data){
+                    $('.ui.modal.status')
+                        .html(data)
+                        .modal("setting", {
+                            closable: false,
+                            onVisible: function () {
+                                $('.ui.status_to.dropdown').dropdown();
+                            }
+                        }).modal("show");
+                });
+            // $(this).addClass('loading');
+            // $.ajax({
+            //     url: "/member/change_status/" + {{ client.id }} + '/',
+            //     type: "POST",
+            //     data: {
+            //         'status': value,
+            //         'csrfmiddlewaretoken': '{{ csrf_token }}',
+            //     },
+            //     success: function(response) {
+            //         $('.ui.dropdown.status').removeClass('loading');
+            //     }
+            // })
         }
     });
 </script>
@@ -35,7 +51,7 @@
 
     <h1 class="ui header">
         <div class="content">
-        {{client}}
+            {{client}}
             <div class="sub header">Client since {{ client.member.created_at|date:"Y/m/d"}}</div>
         </div>
     </h1>
@@ -59,14 +75,16 @@
     </div>
 </div>
 
+<div class="ui modal status"></div>
+
 {% if client.alert %}
 <div class="ui row"><div class="sixteen wide column">
-<div class="ui warning message">
-    <div class="header">
-        Important notice
+    <div class="ui warning message">
+        <div class="header">
+            Important notice
+        </div>
+        <p>{{ client.alert }}</p>
     </div>
-    <p>{{ client.alert }}</p>
-</div>
 </div></div>
 
 {% endif %}

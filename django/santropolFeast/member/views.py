@@ -897,6 +897,15 @@ def change_status(request, id):
         return JsonResponse({'status': 200})
 
 
+def clientStatusScheduler(request, pk):
+    client = get_object_or_404(Client, pk=pk)
+    return render(request, 'client/modal/change_status.html', {
+        'client': client,
+        'client_status': Client.CLIENT_STATUS,
+        'status_to': request.GET.get('status', Client.PAUSED),
+    })
+
+
 class DeleteRestriction(generic.DeleteView):
     model = Restriction
     success_url = reverse_lazy('member:list')
