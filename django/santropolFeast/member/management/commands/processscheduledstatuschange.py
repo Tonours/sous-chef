@@ -24,7 +24,17 @@ class Command(BaseCommand):
             # If client current status correspond with operation status_from,
             # let's operate modification
             if client.status == status_change.status_from:
-                self.stdout.write(self.style.SUCCESS('Client status updated.'))
+                client.status = status_change.status_to
+                client.save()
+                status_change.operation_status = Client_scheduled_status.PROCESSED
+                status_change.save()
+                self.stdout.write(self.style.SUCCESS("Client «{}» status updated from {} to {}.".format(
+                    client.member, status_change.status_from, status_change.status_to
+                )))
             # If not, mark change as processed with error
             else:
-                self.stdout.write(self.style.ERROR('Client status update error.'))
+                status_change.operation_status = Client_scheduled_status.ERROR
+                status_change.save()
+                self.stdout.write(self.style.ERROR("Client «{}» status not updated. Current status is {}, but it should be {}.".format(
+                    client.member, client.status, status_change.status_from
+                )))
