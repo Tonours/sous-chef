@@ -602,9 +602,10 @@ class Client(models.Model):
 class Client_scheduled_status(models.Model):
 
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    linked_scheduled_status = models.ForeignKey('self', on_delete=models.CASCADE)
-    from_status = models.CharField(max_length=1)
-    to_status = models.CharField(max_length=1)
+    linked_scheduled_status = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, default = None)
+    status_from = models.CharField(max_length=1)
+    status_to = models.CharField(max_length=1)
+    reason = models.CharField(max_length=200, blank=True, default = '')
     change_date = models.DateField(auto_now=False, auto_now_add=False,
         default=timezone.now, blank=True, null=True)
     change_state = models.CharField(max_length=5, choices=(('alone', 'Alone'), ('start', 'Start'), ('end', 'End')))
