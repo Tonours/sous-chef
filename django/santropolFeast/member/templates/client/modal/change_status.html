@@ -2,7 +2,7 @@
 <div class="header">
     {{ _('Status modification') }}
 </div>
-<div class="content">
+<form class="content">
     <div class="ui form">
         <div class="field">
             <label>{{ _('Status') }}</label>
@@ -13,7 +13,31 @@
             </select>
         </div>
     </div>
-</div>
+    <br>
+    <p>{{ _('If you want to schedule a status modification, feel free to fill one or two of theses date fields.') }}</p>
+    <div class="ui form">
+        <div class="two fields">
+            <div class="field">
+                <label>{{ _('Start date') }}</label>
+                <div class="ui calendar" id="rangestart">
+                    <div class="ui input left icon">
+                        <i class="calendar icon"></i>
+                        <input type="text" placeholder="Start">
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <label>{{ _('End date') }}</label>
+                <div class="ui calendar" id="rangeend">
+                    <div class="ui input left icon">
+                        <i class="calendar icon"></i>
+                        <input type="text" placeholder="End">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 <div class="actions">
     <button class="ui button deny">Cancel</button>
     <input class="ui button approve" type="submit" value="OK" />

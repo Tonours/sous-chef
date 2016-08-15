@@ -22,7 +22,7 @@ class Command(BaseCommand):
         for status_change in changes:
             client = status_change.client
             # If client current status correspond with operation status_from,
-            # let's operate modification
+            # let's operate modification and mark change as processed
             if client.status == status_change.status_from:
                 client.status = status_change.status_to
                 client.save()
